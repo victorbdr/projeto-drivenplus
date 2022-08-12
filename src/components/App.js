@@ -18,7 +18,7 @@ export default function App() {
           <Route path="/" element={<LogIn />}></Route>
           <Route path="/sign-up/" element={<Register />}></Route>
           <Route path="/subscriptions/" element={<Subscriptions />}></Route>
-          <Route path="/subscriptions/:plano" element={<Plan />}></Route>
+          <Route path="/subscriptions/:plan" element={<Plan />}></Route>
           <Route path="/home/" element={<Home />}></Route>
         </Routes>
       </BrowserRouter>
