@@ -21,7 +21,7 @@ export default function LogIn() {
     );
     promise.then((res) => {
       setToken(res.data.token);
-      console.log(res);
+      localStorage.setItem("token", res.data.token);
       navigate("/subscriptions");
     });
   }

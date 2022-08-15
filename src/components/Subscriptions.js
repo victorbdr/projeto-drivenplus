@@ -34,21 +34,39 @@ export default function Subscriptions() {
             key={plan.id}
             name={plan.name}
             price={plan.price}
-            img={plan.img}
+            img={plan.image}
           />
         </Link>
       ))}
     </>
   );
 }
-function Box({ image }) {
+function Box({ img, price }) {
   return (
     <Container>
-      <img className="poster" src={image} alt="plan" />
+      <img src={img} />
+      <p>R${price}</p>
     </Container>
   );
 }
 const Container = styled.div`
+  align-items: center;
+  justify-content: space-around;
+  background: #0e0e13;
+  border: 3px solid #7e7e7e;
+  border-radius: 12px;
+  display: flex;
   width: 290px;
   height: 180px;
+  img {
+    width: 139.38px;
+    height: 95.13px;
+  }
+  p {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+
+    color: #ffffff;
+  }
 `;

@@ -9,7 +9,8 @@ import Plan from "./components/Plan";
 import Register from "./components/Register";
 import Subscriptions from "./components/Subscriptions";
 export default function App() {
-  const [token, setToken] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
   return (
     <UserContext.Provider value={{ token, setToken }}>
       <GlobalStyle />
