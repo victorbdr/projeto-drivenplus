@@ -46,7 +46,11 @@ export default function Plan() {
     send.then((res) => {
       navigate("/home", {
         state: {
-          image: {},
+          onePlan: {
+            id: onePlan.id,
+            image: onePlan.image,
+            perk: onePlan.perks,
+          },
         },
       });
       console.log(res);
