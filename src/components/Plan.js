@@ -1,5 +1,6 @@
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
+
 import Form from "./shared/Form";
 import Input from "./shared/Input";
 import styled from "styled-components";
@@ -8,6 +9,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Button from "./shared/Button";
 export default function Plan() {
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const { plano } = useParams();
   const [newPayer, setNewPayer] = useState({
@@ -34,32 +36,7 @@ export default function Plan() {
       setOnePlan(response.data);
     });
   }, []);
-  function sendCard(event) {
-    event.preventDefault();
-    console.log("clicado");
-    const info = { ...newPayer };
-    const send = axios.post(
-      "https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
-      info,
-      config
-    );
-    send.then((res) => {
-      navigate("/home", {
-        state: {
-          onePlan: {
-            id: onePlan.id,
-            image: onePlan.image,
-            perk: onePlan.perks,
-          },
-        },
-      });
-      console.log(res);
-    });
-    /* fetch(send).then((response) => {
-      console.log(response);
-      return response;
-    }); */
-  }
+
   function handleForm(event) {
     setNewPayer({ ...newPayer, [event.target.name]: event.target.value });
   }
@@ -101,12 +78,63 @@ export default function Plan() {
           value={newPayer.expirationDate}
           onChange={handleForm}
         />
-        <Button type="submit" onClick={sendCard}>
+        <Button
+          type="submit"
+          onClick={(event) => {
+            event.preventDefault();
+            setOpenModal(true);
+          }}
+        >
           Assinar
         </Button>
+        {openModal && <Modal closeModal={setOpenModal} />}
       </Form>
     </>
   );
+  function Modal({ closeModal }) {
+    return (
+      <>
+        <Background>
+          <ModalContainer>
+            <p>
+              Tem certeza que deseja assinar o plano {onePlan.name} (R$
+              {onePlan.price})?
+            </p>
+            <button
+              onClick={() => {
+                closeModal(false);
+              }}
+            >
+              Não
+            </button>
+            <button onClick={sendCard}>Sim</button>
+          </ModalContainer>
+        </Background>
+      </>
+    );
+  }
+  function sendCard(event) {
+    event.preventDefault();
+    console.log("clicado");
+    const info = { ...newPayer };
+    const send = axios.post(
+      "https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
+      info,
+      config
+    );
+    send.then((res) => {
+      navigate("/home", {
+        state: {
+          onePlan: {
+            id: onePlan.id,
+            image: onePlan.image,
+            perk: onePlan.perks,
+          },
+        },
+      });
+      console.log(res);
+    });
+  }
 }
 const List = styled.div`
   display: flex;
@@ -118,5 +146,39 @@ const List = styled.div`
     line-height: 16px;
 
     color: #ffffff;
+  }
+`;
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  display: flex;
+`;
+const ModalContainer = styled.div`
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 248px;
+  height: 210px;
+  background: #ffffff;
+  border-radius: 12px;
+  p {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+    .body {
+      flex: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
   }
 `;
