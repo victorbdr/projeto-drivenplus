@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Form from "./shared/Form";
 import axios from "axios";
 export default function LogIn() {
+  const { setAndPersistToken } = useContext(UserContext);
   const navigate = useNavigate();
   const { token, setToken } = useContext(UserContext);
   const [password, setPassword] = useState("");
@@ -19,9 +20,10 @@ export default function LogIn() {
       "https://mock-api.driven.com.br/api/v4/driven-plus/auth/login",
       body
     );
+
     promise.then((res) => {
       setToken(res.data.token);
-      localStorage.setItem("token", res.data.token);
+      setAndPersistToken(res.data.token);
       navigate("/subscriptions");
     });
   }

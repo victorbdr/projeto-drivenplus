@@ -1,6 +1,5 @@
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
-
 import Form from "./shared/Form";
 import Input from "./shared/Input";
 import styled from "styled-components";
@@ -43,13 +42,13 @@ export default function Plan() {
 
   return (
     <>
-      <List>
-        <img src={onePlan.image} />
-        <h1>{onePlan.name}</h1>
-        <p>Benefícios:</p>
-        <p>R${onePlan.price} cobrados mensalmente</p>
-      </List>
       <Form>
+        <List>
+          <img src={onePlan.image} />
+          <h1>{onePlan.name}</h1>
+          <p>Benefícios:</p>
+          <p>R${onePlan.price} cobrados mensalmente</p>
+        </List>
         <Input
           name="cardName"
           type="text"
@@ -93,24 +92,24 @@ export default function Plan() {
   );
   function Modal({ closeModal }) {
     return (
-      <>
-        <Background>
-          <ModalContainer>
-            <p>
-              Tem certeza que deseja assinar o plano {onePlan.name} (R$
-              {onePlan.price})?
-            </p>
-            <button
-              onClick={() => {
-                closeModal(false);
-              }}
-            >
-              Não
-            </button>
-            <button onClick={sendCard}>Sim</button>
-          </ModalContainer>
-        </Background>
-      </>
+      <Background>
+        <button onClick={() => closeModal(false)}>x</button>
+        <ModalContainer>
+          <p>
+            Tem certeza que deseja assinar o plano {onePlan.name} (R$
+            {onePlan.price})?
+          </p>
+          <Button
+            onClick={() => {
+              closeModal(false);
+            }}
+          >
+            {" "}
+            Não
+          </Button>
+          <Button onClick={sendCard}>Sim</Button>
+        </ModalContainer>
+      </Background>
     );
   }
   function sendCard(event) {
@@ -149,13 +148,15 @@ const List = styled.div`
   }
 `;
 const Background = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.7);
   position: fixed;
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const ModalContainer = styled.div`
   padding: 25px;
@@ -163,7 +164,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   width: 248px;
   height: 210px;
-  background: #ffffff;
+  background-color: #ffffff;
   border-radius: 12px;
   p {
     font-style: normal;

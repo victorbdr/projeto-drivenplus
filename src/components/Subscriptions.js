@@ -22,7 +22,7 @@ export default function Subscriptions() {
       console.log(promise);
       setPlans(response.data);
     });
-  });
+  }, []);
 
   return (
     <>
