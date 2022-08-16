@@ -1,30 +1,39 @@
 import Button from "./shared/Button";
 import Input from "./shared/Input";
+import { useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "./shared/Form";
 import axios from "axios";
 export default function LogIn() {
-  const { setAndPersistToken } = useContext(UserContext);
   const navigate = useNavigate();
+  const { onePlan, setOnePlan } = useContext(UserContext);
   const { token, setToken } = useContext(UserContext);
+
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   function handleForm(event) {
     event.preventDefault();
   }
-  function sendForm() {
+  function sendForm(event) {
+    event.preventDefault();
+
     const body = { email, password };
     const promise = axios.post(
       "https://mock-api.driven.com.br/api/v4/driven-plus/auth/login",
       body
     );
-
     promise.then((res) => {
+      setOnePlan(res.data);
+
       setToken(res.data.token);
-      setAndPersistToken(res.data.token);
-      navigate("/subscriptions");
+
+      res.data.membership !== null
+        ? navigate("/home")
+        : navigate("/subscriptions");
+
+      localStorage.setItem("token", res.data.token);
     });
   }
   return (

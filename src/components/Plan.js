@@ -19,7 +19,7 @@ export default function Plan() {
     expirationDate: "",
   });
   console.log(newPayer);
-  const [onePlan, setOnePlan] = useState({});
+  const { onePlan, setOnePlan } = useContext(UserContext);
   const { token } = useContext(UserContext);
   const config = {
     headers: {
@@ -122,15 +122,18 @@ export default function Plan() {
       config
     );
     send.then((res) => {
-      navigate("/home", {
+      setOnePlan(res.data);
+      navigate(
+        "/home" /* {
         state: {
           onePlan: {
             id: onePlan.id,
-            image: onePlan.image,
+            img: onePlan.image,
             perk: onePlan.perks,
           },
         },
-      });
+      } */
+      );
       console.log(res);
     });
   }

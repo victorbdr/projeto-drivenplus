@@ -6,7 +6,9 @@ import Button from "./shared/Button";
 import { useParams } from "react-router-dom";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-export default function Home() {
+export default function Home({ membership }) {
+  const { onePlan, setOnePlan } = useContext(UserContext);
+  console.log(onePlan);
   const { plano } = useParams();
   const [newPayer, setNewPayer] = useState({
     membershipId: `${plano}`,
@@ -16,17 +18,14 @@ export default function Home() {
     expirationDate: "",
   });
   const navigate = useNavigate();
-  const location = useLocation();
   const { token } = useContext(UserContext);
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const {
-    onePlan: { image, perk, id },
-  } = location.state;
   function cancelPlan() {
     console.log("vem");
     const promise = axios.delete(
@@ -50,17 +49,17 @@ export default function Home() {
       navigate("/subscriptions");
     });
   }
-  if (id === 1) {
+  if (onePlan.membership.id === 1) {
     return (
       <>
-        <img src={image} />
-        <h1>Olá, fulano</h1>
+        <img src={onePlan.membership.image} />
+        <h1>Olá, {onePlan.name} </h1>
         <Perks>
-          <a href={perk[0].link}>
-            <Button>{perk[0].title}</Button>
+          <a href={onePlan.membership.perks[0].link}>
+            <Button>{onePlan.membership.perks[0].title}</Button>
           </a>
-          <a href={perk[1].link}>
-            <Button>{perk[1].title}</Button>
+          <a href={onePlan.membership.perks[1].link}>
+            <Button>{onePlan.membership.perks[1].title}</Button>
           </a>
         </Perks>
         <Cancel>
@@ -69,20 +68,20 @@ export default function Home() {
         </Cancel>
       </>
     );
-  } else if (id === 2) {
+  } else if (onePlan.membership.id === 2) {
     return (
       <>
-        <img src={image} />
-        <h1>Olá, fulano</h1>
+        <img src={onePlan.membership.image} />
+        <h1>Olá, {onePlan.name} </h1>
         <Perks>
-          <a href={perk[0].link}>
-            <Button>{perk[0].title}</Button>
+          <a href={onePlan.membership.perks[0].link}>
+            <Button>{onePlan.membership.perks[0].title}</Button>
           </a>
-          <a href={perk[1].link}>
-            <Button>{perk[1].title}</Button>
+          <a href={onePlan.membership.perks[1].link}>
+            <Button>{onePlan.membership.perks[1].title}</Button>
           </a>
-          <a href={perk[2].link}>
-            <Button>{perk[2].title}</Button>
+          <a href={onePlan.membership.perks[2].link}>
+            <Button>{onePlan.membership.perks[2].title}</Button>
           </a>
         </Perks>
         <Cancel>
@@ -91,23 +90,23 @@ export default function Home() {
         </Cancel>
       </>
     );
-  } else if (id === 3) {
+  } else if (onePlan.membership.id === 3) {
     return (
       <>
-        <img src={image} />
-        <h1>Olá, fulano</h1>
+        <img src={onePlan.membership.image} />
+        <h1>Olá, {onePlan.name} </h1>
         <Perks>
-          <a href={perk[0].link}>
-            <Button>{perk[0].title}</Button>
+          <a href={onePlan.membership.perks[0].link}>
+            <Button>{onePlan.membership.perks[0].title}</Button>
           </a>
-          <a href={perk[1].link}>
-            <Button>{perk[1].title}</Button>
+          <a href={onePlan.membership.perks[1].link}>
+            <Button>{onePlan.membership.perks[1].title}</Button>
           </a>
-          <a href={perk[2].link}>
-            <Button>{perk[2].title}</Button>
+          <a href={onePlan.membership.perks[2].link}>
+            <Button>{onePlan.membership.perks[2].title}</Button>
           </a>
-          <a href={perk[3].link}>
-            <Button>{perk[3].title}</Button>
+          <a href={onePlan.membership.perks[3].link}>
+            <Button>{onePlan.membership.perks[3].title}</Button>
           </a>
         </Perks>
         <Cancel>
