@@ -13,18 +13,20 @@ export default function App() {
   const tokenOnLocalStorage = localStorage.getItem("token");
   const [token, setToken] = useState(tokenOnLocalStorage);
   const [onePlan, setOnePlan] = useState({});
-  function setAndPersistToken(token) {
-    setToken(token);
-    localStorage.setItem("token", token);
-  }
   const { plano } = useParams();
+  const [planId, setPlanId] = useState();
   const [newPayer, setNewPayer] = useState({
-    membershipId: `${plano}`,
+    membershipId: planId,
     cardName: "",
     cardNumber: "",
     securityNumber: "",
     expirationDate: "",
   });
+  function setAndPersistToken(token) {
+    setToken(token);
+    localStorage.setItem("token", token);
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -35,6 +37,8 @@ export default function App() {
         setAndPersistToken,
         onePlan,
         setOnePlan,
+        planId,
+        setPlanId,
       }}
     >
       <GlobalStyle />

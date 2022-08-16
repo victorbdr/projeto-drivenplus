@@ -26,6 +26,7 @@ export default function Register() {
       console.log("foi aqui");
       promise.catch((error) => console.log(error.response));
     });
+    promise.catch((error) => console.log(error.response));
   }
   function handleForm(event) {
     setNewUser({ ...newUser, [event.target.name]: event.target.value });

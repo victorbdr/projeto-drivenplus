@@ -21,7 +21,9 @@ export default function Subscriptions() {
     promise.then((response) => {
       console.log(promise);
       setPlans(response.data);
+      console.log(plans);
     });
+    promise.catch((error) => console.log(error.response));
   }, []);
 
   return (

@@ -7,16 +7,11 @@ import { useParams } from "react-router-dom";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 export default function Home({ membership }) {
-  const { onePlan, setOnePlan } = useContext(UserContext);
+  const { onePlan, setOnePlan, newPayer, setNewPayer } =
+    useContext(UserContext);
   console.log(onePlan);
   const { plano } = useParams();
-  const [newPayer, setNewPayer] = useState({
-    membershipId: `${plano}`,
-    cardName: "",
-    cardNumber: "",
-    securityNumber: "",
-    expirationDate: "",
-  });
+
   const navigate = useNavigate();
   const { token } = useContext(UserContext);
 
@@ -35,19 +30,25 @@ export default function Home({ membership }) {
     promise.then((response) => {
       console.log(response);
       navigate("/subscriptions");
+      console.log(response);
     });
+    promise.catch((error) => console.log(error.response));
   }
-  function changePlan() {
+  function changePlan(event) {
+    event.preventDefault();
     const info = { ...newPayer };
     const send = axios.post(
       "https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
-      config,
-      info
+      info,
+      config
     );
+    console.log(send);
     send.then((res) => {
+      setOnePlan(res.data);
       console.log(res);
       navigate("/subscriptions");
     });
+    send.catch((error) => console.log(error.response));
   }
   if (onePlan.membership.id === 1) {
     return (
@@ -86,7 +87,9 @@ export default function Home({ membership }) {
         </Perks>
         <Cancel>
           <Button onClick={changePlan}>Mudar Plano</Button>
-          <Button onClick={cancelPlan}>Cancelar plano</Button>
+          <Button orange onClick={cancelPlan}>
+            Cancelar plano
+          </Button>
         </Cancel>
       </>
     );

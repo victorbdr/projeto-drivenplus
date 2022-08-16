@@ -1,4 +1,3 @@
-import Button from "./shared/Button";
 import Input from "./shared/Input";
 import { useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -6,6 +5,8 @@ import UserContext from "../contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "./shared/Form";
 import axios from "axios";
+import Button from "./shared/Button";
+
 export default function LogIn() {
   const navigate = useNavigate();
   const { onePlan, setOnePlan } = useContext(UserContext);
@@ -26,15 +27,14 @@ export default function LogIn() {
     );
     promise.then((res) => {
       setOnePlan(res.data);
-
       setToken(res.data.token);
-
       res.data.membership !== null
         ? navigate("/home")
         : navigate("/subscriptions");
 
       localStorage.setItem("token", res.data.token);
     });
+    promise.catch((error) => console.log(error.response));
   }
   return (
     <>

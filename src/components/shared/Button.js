@@ -1,7 +1,11 @@
 import styled from "styled-components";
-const Button = styled.button`
+
+export default function Button({ children, ...otherProps }) {
+  return <Wrapper {...otherProps}>{children}</Wrapper>;
+}
+const Wrapper = styled.button`
   display: flex;
-  width: 298px;
+  width: ${(props) => (props.small ? "95px" : "298px")};
   height: 52px;
   background: #ff4791;
   border-radius: 8px;
@@ -19,6 +23,17 @@ const Button = styled.button`
     line-height: 16px;
 
     color: #ffffff;
+    ${(props) => {
+      if (props.grey) {
+        return `
+        background-color: #CECECE;
+        `;
+      }
+      if (props.orange) {
+        return `
+        background-color: #FF4747;
+        `;
+      }
+    }}
   }
 `;
-export default Button;

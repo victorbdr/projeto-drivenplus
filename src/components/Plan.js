@@ -8,18 +8,13 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Button from "./shared/Button";
 export default function Plan() {
+  const { plano } = useParams();
+
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const { plano } = useParams();
-  const [newPayer, setNewPayer] = useState({
-    membershipId: `${plano}`,
-    cardName: "",
-    cardNumber: "",
-    securityNumber: "",
-    expirationDate: "",
-  });
-  console.log(newPayer);
-  const { onePlan, setOnePlan } = useContext(UserContext);
+
+  const { onePlan, setOnePlan, newPayer, setNewPayer, planId, setPlanId } =
+    useContext(UserContext);
   const { token } = useContext(UserContext);
   const config = {
     headers: {
@@ -32,9 +27,11 @@ export default function Plan() {
       config
     );
     promise.then((response) => {
-      setOnePlan(response.data);
-    });
-  }, []);
+      setPlanId(response.data.id);
+      console.log(planId);
+    }, []);
+    promise.catch((error) => console.log(error.response));
+  });
 
   function handleForm(event) {
     setNewPayer({ ...newPayer, [event.target.name]: event.target.value });
@@ -42,6 +39,11 @@ export default function Plan() {
 
   return (
     <>
+      <Link to="/subscriptions">
+        <BackButton>
+          <img src="../img/Vector.png" />
+        </BackButton>
+      </Link>
       <Form>
         <List>
           <img src={onePlan.image} />
@@ -93,49 +95,46 @@ export default function Plan() {
   function Modal({ closeModal }) {
     return (
       <Background>
-        <button onClick={() => closeModal(false)}>x</button>
+        <Out onClick={() => closeModal(false)}>x</Out>
         <ModalContainer>
           <p>
             Tem certeza que deseja assinar o plano {onePlan.name} (R$
             {onePlan.price})?
           </p>
-          <Button
-            onClick={() => {
-              closeModal(false);
-            }}
-          >
-            {" "}
-            Não
-          </Button>
-          <Button onClick={sendCard}>Sim</Button>
+          <ModalButtons>
+            <Button
+              small={true}
+              grey
+              onClick={() => {
+                closeModal(false);
+              }}
+            >
+              {" "}
+              Não
+            </Button>
+            <Button small={true} onClick={sendCard}>
+              Sim
+            </Button>
+          </ModalButtons>
         </ModalContainer>
       </Background>
     );
   }
   function sendCard(event) {
     event.preventDefault();
-    console.log("clicado");
-    const info = { ...newPayer };
+    console.log(newPayer);
     const send = axios.post(
       "https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
-      info,
+      newPayer,
       config
     );
+
     send.then((res) => {
       setOnePlan(res.data);
-      navigate(
-        "/home" /* {
-        state: {
-          onePlan: {
-            id: onePlan.id,
-            img: onePlan.image,
-            perk: onePlan.perks,
-          },
-        },
-      } */
-      );
+      navigate("/home");
       console.log(res);
     });
+    send.catch((error) => console.log(error.response));
   }
 }
 const List = styled.div`
@@ -185,4 +184,29 @@ const ModalContainer = styled.div`
       text-align: center;
     }
   }
+`;
+const Out = styled.div`
+  display: flex;
+  position: fixed;
+  top: 25px;
+  right: 20px;
+  width: 28px;
+  height: 24px;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+`;
+const BackButton = styled.div`
+  display: flex;
+  width: 25px;
+  height: 25px;
+  position: fixed;
+  left: 22px;
+  top: 24px;
+`;
+const ModalButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
