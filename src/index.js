@@ -14,14 +14,8 @@ export default function App() {
   const [token, setToken] = useState(tokenOnLocalStorage);
   const [onePlan, setOnePlan] = useState({});
   const { plano } = useParams();
-  const [planId, setPlanId] = useState();
-  const [newPayer, setNewPayer] = useState({
-    membershipId: planId,
-    cardName: "",
-    cardNumber: "",
-    securityNumber: "",
-    expirationDate: "",
-  });
+  const [membership, setMembership] = useState("");
+
   function setAndPersistToken(token) {
     setToken(token);
     localStorage.setItem("token", token);
@@ -32,13 +26,11 @@ export default function App() {
       value={{
         token,
         setToken,
-        newPayer,
-        setNewPayer,
         setAndPersistToken,
         onePlan,
         setOnePlan,
-        planId,
-        setPlanId,
+        membership,
+        setMembership,
       }}
     >
       <GlobalStyle />

@@ -8,13 +8,21 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Button from "./shared/Button";
 export default function Plan() {
+  const { onePlan, setOnePlan, planId, setPlanId, membership, setMembership } =
+    useContext(UserContext);
+  const newMembership = Number(membership);
+  const [newPayer, setNewPayer] = useState({
+    membershipId: newMembership,
+    cardName: "",
+    cardNumber: "",
+    securityNumber: "",
+    expirationDate: "",
+  });
   const { plano } = useParams();
-
+  console.log(newMembership);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
-  const { onePlan, setOnePlan, newPayer, setNewPayer, planId, setPlanId } =
-    useContext(UserContext);
   const { token } = useContext(UserContext);
   const config = {
     headers: {
@@ -27,11 +35,11 @@ export default function Plan() {
       config
     );
     promise.then((response) => {
-      setPlanId(response.data.id);
-      console.log(planId);
-    }, []);
+      setOnePlan(response.data);
+      setMembership(response.data.perks[0].membershipId);
+    });
     promise.catch((error) => console.log(error.response));
-  });
+  }, []);
 
   function handleForm(event) {
     setNewPayer({ ...newPayer, [event.target.name]: event.target.value });
@@ -122,7 +130,6 @@ export default function Plan() {
   }
   function sendCard(event) {
     event.preventDefault();
-    console.log(newPayer);
     const send = axios.post(
       "https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
       newPayer,
