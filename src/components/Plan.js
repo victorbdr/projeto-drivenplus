@@ -57,7 +57,7 @@ export default function Plan() {
           <h2>Benefícios:</h2>
           <Ben>
             {onePlan.perks.map((p) => {
-              return <p>{p.title}</p>;
+              return <p>{p.title} </p>;
             })}
           </Ben>
           <h2>Preco:</h2>
@@ -104,7 +104,7 @@ export default function Plan() {
       </Form>
     </>
   ) : (
-    "queijo"
+    <p>Nao foi</p>
   );
   function Modal({ closeModal }) {
     return (
