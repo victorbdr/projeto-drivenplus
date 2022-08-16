@@ -11,7 +11,7 @@ export default function LogIn() {
   const navigate = useNavigate();
   const { onePlan, setOnePlan } = useContext(UserContext);
   const { token, setToken } = useContext(UserContext);
-
+  const { setAndPersistToken } = useContext(UserContext);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   function handleForm(event) {
@@ -26,15 +26,19 @@ export default function LogIn() {
       body
     );
     promise.then((res) => {
+      setAndPersistToken(res.data.token);
       setOnePlan(res.data);
-      setToken(res.data.token);
+
       res.data.membership !== null
         ? navigate("/home")
         : navigate("/subscriptions");
 
       localStorage.setItem("token", res.data.token);
     });
-    promise.catch((error) => console.log(error.response));
+    promise.catch((error) => {
+      console.log(error.response);
+      alert("Houve um erro, tente novamente");
+    });
   }
   return (
     <>

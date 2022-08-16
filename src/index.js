@@ -13,8 +13,6 @@ export default function App() {
   const tokenOnLocalStorage = localStorage.getItem("token");
   const [token, setToken] = useState(tokenOnLocalStorage);
   const [onePlan, setOnePlan] = useState({});
-  const { plano } = useParams();
-  const [membership, setMembership] = useState("");
 
   function setAndPersistToken(token) {
     setToken(token);
@@ -29,8 +27,6 @@ export default function App() {
         setAndPersistToken,
         onePlan,
         setOnePlan,
-        membership,
-        setMembership,
       }}
     >
       <GlobalStyle />

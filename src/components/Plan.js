@@ -8,18 +8,16 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Button from "./shared/Button";
 export default function Plan() {
-  const { onePlan, setOnePlan, planId, setPlanId, membership, setMembership } =
-    useContext(UserContext);
-  const newMembership = Number(membership);
+  const { plano } = useParams();
+  const { onePlan, setOnePlan, planId, setPlanId } = useContext(UserContext);
   const [newPayer, setNewPayer] = useState({
-    membershipId: newMembership,
+    membershipId: `${plano}`,
     cardName: "",
     cardNumber: "",
     securityNumber: "",
     expirationDate: "",
   });
-  const { plano } = useParams();
-  console.log(newMembership);
+
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
@@ -36,7 +34,6 @@ export default function Plan() {
     );
     promise.then((response) => {
       setOnePlan(response.data);
-      setMembership(response.data.perks[0].membershipId);
     });
     promise.catch((error) => console.log(error.response));
   }, []);
@@ -141,7 +138,10 @@ export default function Plan() {
       navigate("/home");
       console.log(res);
     });
-    send.catch((error) => console.log(error.response));
+    send.catch((error) => {
+      console.log(error.response);
+      alert("digite os dados corretamente");
+    });
   }
 }
 const List = styled.div`

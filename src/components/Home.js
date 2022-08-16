@@ -7,14 +7,10 @@ import { useParams } from "react-router-dom";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 export default function Home({ membership }) {
-  const { onePlan, setOnePlan, newPayer, setNewPayer } =
-    useContext(UserContext);
-  console.log(onePlan);
-  const { plano } = useParams();
-
-  const navigate = useNavigate();
+  const { setAndPersistToken } = useContext(UserContext);
   const { token } = useContext(UserContext);
-
+  const { onePlan, setOnePlan } = useContext(UserContext);
+  const navigate = useNavigate();
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -34,21 +30,9 @@ export default function Home({ membership }) {
     });
     promise.catch((error) => console.log(error.response));
   }
+
   function changePlan(event) {
     event.preventDefault();
-    const info = { ...newPayer };
-    const send = axios.post(
-      "https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",
-      info,
-      config
-    );
-    console.log(send);
-    send.then((res) => {
-      setOnePlan(res.data);
-      console.log(res);
-      navigate("/subscriptions");
-    });
-    send.catch((error) => console.log(error.response));
   }
   if (onePlan.membership.id === 1) {
     return (
@@ -64,8 +48,12 @@ export default function Home({ membership }) {
           </a>
         </Perks>
         <Cancel>
-          <Button onClick={changePlan}>Mudar Plano</Button>
-          <Button onClick={cancelPlan}>Cancelar plano</Button>
+          <Link to="/subscriptions/">
+            <Button onClick={cancelPlan}>Mudar Plano</Button>
+          </Link>
+          <Button orange onClick={cancelPlan}>
+            Cancelar plano
+          </Button>
         </Cancel>
       </>
     );
@@ -86,7 +74,9 @@ export default function Home({ membership }) {
           </a>
         </Perks>
         <Cancel>
-          <Button onClick={changePlan}>Mudar Plano</Button>
+          <Link to="/subscriptions/">
+            <Button onClick={cancelPlan}>Mudar Plano</Button>
+          </Link>
           <Button orange onClick={cancelPlan}>
             Cancelar plano
           </Button>
@@ -113,8 +103,12 @@ export default function Home({ membership }) {
           </a>
         </Perks>
         <Cancel>
-          <Button onClick={changePlan}>Mudar Plano</Button>
-          <Button onClick={cancelPlan}>Cancelar plano</Button>
+          <Link to="/subscriptions/">
+            <Button onClick={cancelPlan}>Mudar Plano</Button>
+          </Link>
+          <Button orange onClick={cancelPlan}>
+            Cancelar plano
+          </Button>
         </Cancel>
       </>
     );
