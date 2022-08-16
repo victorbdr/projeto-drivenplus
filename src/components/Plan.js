@@ -38,12 +38,11 @@ export default function Plan() {
     });
     promise.catch((error) => console.log(error.response));
   }, []);
-  console.log(onePlan);
   function handleForm(event) {
     setNewPayer({ ...newPayer, [event.target.name]: event.target.value });
   }
 
-  return Object.keys(onePlan).length > 0 ? (
+  return (
     <>
       <Link to="/subscriptions">
         <BackButton>
@@ -55,11 +54,6 @@ export default function Plan() {
           <img src={onePlan.image} />
           <h1>{onePlan.name}</h1>
           <h2>Benefícios:</h2>
-          <Ben>
-            {onePlan.perks.map((p) => {
-              return <p>{p.title} </p>;
-            })}
-          </Ben>
           <h2>Preco:</h2>
           <p>R${onePlan.price} cobrados mensalmente</p>
         </List>
@@ -103,9 +97,8 @@ export default function Plan() {
         {openModal && <Modal closeModal={setOpenModal} />}
       </Form>
     </>
-  ) : (
-    <p>Nao foi</p>
   );
+
   function Modal({ closeModal }) {
     return (
       <Background>
@@ -143,7 +136,7 @@ export default function Plan() {
     );
 
     send.then((res) => {
-      /* setOnePlan(res.data); */
+      setOnePlan(res.data);
       navigate("/home");
       console.log(res);
     });
