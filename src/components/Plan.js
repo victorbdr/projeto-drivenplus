@@ -9,7 +9,8 @@ import { useParams } from "react-router-dom";
 import Button from "./shared/Button";
 export default function Plan() {
   const { plano } = useParams();
-  const { onePlan, setOnePlan, planId, setPlanId } = useContext(UserContext);
+
+  const { onePlan, setOnePlan } = useContext(UserContext);
   const [newPayer, setNewPayer] = useState({
     membershipId: `${plano}`,
     cardName: "",
@@ -37,12 +38,12 @@ export default function Plan() {
     });
     promise.catch((error) => console.log(error.response));
   }, []);
-
+  console.log(onePlan);
   function handleForm(event) {
     setNewPayer({ ...newPayer, [event.target.name]: event.target.value });
   }
 
-  return (
+  return Object.keys(onePlan).length > 0 ? (
     <>
       <Link to="/subscriptions">
         <BackButton>
@@ -53,7 +54,14 @@ export default function Plan() {
         <List>
           <img src={onePlan.image} />
           <h1>{onePlan.name}</h1>
-          <p>Benefícios:</p>
+          <h2>Benefícios:</h2>
+          <Ben>
+            {" "}
+            {onePlan.perks.map((p) => {
+              return <p>{p.title}</p>;
+            })}
+          </Ben>
+          <h2>Preco:</h2>
           <p>R${onePlan.price} cobrados mensalmente</p>
         </List>
         <Input
@@ -96,6 +104,8 @@ export default function Plan() {
         {openModal && <Modal closeModal={setOpenModal} />}
       </Form>
     </>
+  ) : (
+    "queijo"
   );
   function Modal({ closeModal }) {
     return (
@@ -134,7 +144,7 @@ export default function Plan() {
     );
 
     send.then((res) => {
-      setOnePlan(res.data);
+      /* setOnePlan(res.data); */
       navigate("/home");
       console.log(res);
     });
@@ -145,15 +155,32 @@ export default function Plan() {
   }
 }
 const List = styled.div`
+  gap: 5px;
   display: flex;
   flex-direction: column;
   p {
+    font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-
     color: #ffffff;
+  }
+  h2 {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #ffffff;
+  }
+  img {
+    margin-top: 10px;
+    width: 164px;
+    height: 164px;
+  }
+  h1 {
+    margin-top: 0px;
   }
 `;
 const Background = styled.div`
@@ -216,4 +243,11 @@ const ModalButtons = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+const Ben = styled.div`
+  display: flex;
+  flex-direction: column;
+  p {
+    gap: 1px;
+  }
 `;
