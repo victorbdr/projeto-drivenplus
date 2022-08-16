@@ -56,7 +56,6 @@ export default function Plan() {
           <h1>{onePlan.name}</h1>
           <h2>Benefícios:</h2>
           <Ben>
-            {" "}
             {onePlan.perks.map((p) => {
               return <p>{p.title}</p>;
             })}
